@@ -20,6 +20,7 @@ DEBUG = True
 ALLOWED_HOSTS = [
     '127.0.0.1',  # If you also want to allow local development
     'localhost',
+    'psiattendance-production.up.railway.app',
 ]
 
 
