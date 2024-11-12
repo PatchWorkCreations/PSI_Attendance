@@ -1,0 +1,422 @@
+{% extends "myApp/base.html" %}
+{% load static %}
+
+{% block title %}Home - Treaser Book Landing{% endblock %}
+
+{% block content %}
+<style>
+    .cta-wrapper {
+  position: relative;
+  background: #111111;
+  background: url("/static/assets/images/about/cta-bg1.jpg") fixed 50% 50%;
+  background-size: cover;
+  border-radius: 15px;
+  padding: 80px 40px 90px 40px;
+  transition: background 0.3s, border-radius 0.3s, opacity 0.3s;
+}
+.cta-wrapper:before {
+  position: absolute;
+  content: "";
+  left: 0px;
+  top: 0px;
+  width: 100%;
+  height: 100%;
+  background: #111111;
+  opacity: 0.95;
+  border-radius: 15px;
+}
+
+.bg-main{
+  position: relative;
+  background: #111111;
+  background: url("/static/assets/images/about/cta-bg1.jpg") fixed 50% 50%;
+  background-size: cover;
+  border-radius: 15px;
+  padding: 80px 40px 90px 40px;
+  transition: background 0.3s, border-radius 0.3s, opacity 0.3s;
+}
+
+.bg-main:before {
+  position: absolute;
+  content: "";
+  left: 0px;
+  top: 0px;
+  width: 100%;
+  height: 100%;
+  background: #111111;
+  opacity: 0.95;
+  border-radius: 15px;
+}
+
+#contactMessage {
+    display: none;         /* Initially hidden */
+    text-align: center;     /* Center the text */
+    font-weight: bold;      /* Make the text bold */
+    color: green;           /* Set the color */
+    margin-top: 20px;       /* Add some space above */
+}
+
+</style>
+
+<section class="banner-main-3" id="banner-3">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-sm-12 col-md-6">
+                <div class="main-banner-content">
+                    <span class="subtitle">The Lion You Don’t See – Coming Soon!</span>
+                    <h1>Discover the Strength Within You</h1>
+                    <p class="mb-3 mt-4">
+                        The roar you’ve been waiting for is almost here! The Lion You Don’t See is more than a book—it’s a journey of self-discovery, resilience, and untapped courage. Each page will take you deeper, inspiring you to recognize the lion within.
+                    </p>
+                    <span class="subtitle">Be the First to Experience It</span>
+                    <p class="mb-3 mt-4">
+                        While the official release is around the corner, you don’t have to wait! Early access is available now at iRiseUpFoundation.org/thelionyoudontsee. Dive in early, and prepare to unleash your hidden strength.
+                    </p>
+
+                    <div class="btn-container">
+                        <a href="#" target="_blank" class="btn btn-main"> Learn More</a>
+                        <a href="https://www.iriseupfoundation.org/product-page/the-lion-you-don-t-see" target="_blank" class="btn btn-main-2 ml-0 ml-lg-2 ">Get It Now</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="banner-img">
+                    <img src="{% static 'assets/images/about/book1.png' %}" alt="Book Image" class="img-fluid w-100">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="features" id="features">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="heading">
+                    <span>features</span>
+                    <h2>Core Features of the Book</h2>
+                    <p>The Lion You Don’t See is a transformative journey through resilience, personal growth, and the strength that lies within, crafted to empower and inspire readers of all ages.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-4 col-md-6">
+                <div class="feature-item">
+                    <div class="feature-icon"><i class="ti-heart"></i></div>
+                    <h5>Inspiring Real-Life Lessons</h5>
+                    <p>Each chapter is packed with actionable insights and reflections, encouraging readers to overcome their challenges and see the strength within.</p>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="feature-item">
+                    <div class="feature-icon"><i class="ti-mobile"></i></div>
+                    <h5>Accessible Across All Devices</h5>
+                    <p>Whether on Kindle, mobile, or desktop, the book’s layout and design provide an immersive reading experience for everyone.</p>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="feature-item">
+                    <div class="feature-icon"><i class="ti-layers-alt"></i></div>
+                    <h5>High-Quality Visuals and Design</h5>
+                    <p>Includes vivid illustrations and a beautiful layout that make the reading journey engaging and memorable.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="book" id="book">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-5 col-md-6">
+                <div class="book-preview">
+                    <img src="{% static 'assets/images/about/book1.png' %}" class="background-device img-fluid" alt="Kindle Preview">
+                    <div class="owl-book owl-carousel owl-theme" style="opacity: 1; display: block;">
+                        <div class="book-item">
+                            <img src="{% static 'assets/images/about/book_page01.png' %}" alt="Book Page" class="img-fluid">
+                            <div class="overlay">
+                                <a href="{% static 'assets/images/about/book_page00.png' %}" class="popup-gallery img-fluid" data-title="Image Caption">
+                                    <i class="ti-fullscreen"></i>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="book-item">
+                            <img src="{% static 'assets/images/about/book_page02.png' %}" alt="Book Page 2" class="img-fluid">
+                            <div class="overlay">
+                                <a href="{% static 'assets/images/about/book_page2.png' %}" class="popup-gallery img-fluid" data-title="Image Caption">
+                                    <i class="ti-fullscreen"></i>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="book-item">
+                            <img src="{% static 'assets/images/about/book_page03.png' %}" alt="Book Page" class="img-fluid">
+                            <div class="overlay">
+                                <a href="{% static 'assets/images/about/book_page.png' %}" class="popup-gallery img-fluid" data-title="Image Caption">
+                                    <i class="ti-fullscreen"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6 col-md-6">
+                <div class="section-heading book-info mt-lg-0 pl-4">
+                    <h2 class="text-lg mb-4">About The Book</h2>
+                    <p class="lead">
+                        The Lion You Don’t See is a unique exploration of personal power and hidden resilience, designed to resonate with teens and parents alike, inspiring readers to discover the unbreakable spirit within.
+                    </p>
+
+                    <div class="about-features mt-5">
+                        <div class="about-item mb-40">
+                            <h5>Empowering Vision</h5>
+                            <p>This book guides readers on a journey to unlock their inner strength and confront life’s unseen challenges with confidence and courage.</p>
+                        </div>
+                        <div class="about-item mb-40">
+                            <h5>Insightful Wisdom</h5>
+                            <p>With each chapter, readers gain practical tools and spiritual insights to cultivate resilience and find their own path to growth.</p>
+                        </div>
+                        <div class="about-item">
+                            <h5>Timeless Inspiration</h5>
+                            <p>Filled with lessons that remain relevant across generations, The Lion You Don’t See serves as an evergreen source of motivation and guidance.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<section class="cta-3">
+    <div class="container">
+        <div class="row justify-content-center cta-wrapper">
+            <div class="col-lg-10">
+                <div class="cta-content text-center">
+                    <span>Sign up now for updates, special insights, and exclusive pre-release offers.</span>
+                    <h2>Uncover the strength within—get The Lion You Don’t See today.</h2>
+                    <a href="#" target="_blank" class="btn btn-white mt-2">
+                        <i class="fab fa-amazon mr-2"></i> Available on Amazon
+                    </a>
+                    <a href="https://www.iriseupfoundation.org/product-page/the-lion-you-don-t-see" target="_blank" class="btn btn-main-2 mt-2 ml-lg-2">
+                        <i class="fab fa-apple mr-2"></i> Available on iriseupfoundation.org
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+<section class="author section" id="author">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <div class="about-img">
+                    <img src="{% static 'assets/images/about/authorimg1.jpg' %}" alt="Author Image" class="img-fluid w-100">
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="author-info pl-4 mt-5 mt-lg-0">
+                    <div class="heading">
+                        <span class="text-color">About the Author</span>
+                        <h2>Maria Gregory</h2>
+                        <div class="follow">
+                            <ul class="list-inline mb-0">
+                                <li class="list-inline-item">
+                                    <a href="#"><i class="ti-facebook"></i></a>
+                                </li>
+                                <li class="list-inline-item">
+                                    <a href="#"><i class="ti-twitter"></i></a>
+                                </li>
+                                <li class="list-inline-item">
+                                    <a href="#"><i class="ti-linkedin"></i></a>
+                                </li>
+                                <li class="list-inline-item">
+                                    <a href="#"><i class="ti-pinterest"></i></a>
+                                </li>
+                                <li class="list-inline-item">
+                                    <a href="#"><i class="ti-github"></i></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <p class="mb-4">
+                        Maria Gregory is a natural storyteller and visionary, whose heart beats at the core of The Lion You Don’t See. As the founder of the I RiseUp Group of Companies—including I Riseup Academy, I Riseup Foundation, and CLICK (Computer Learning for Inner City Kids)—Maria is on a mission to empower people to find their inner strength and realize the incredible possibilities that life has to offer.
+                    </p>
+
+                    <p class="mb-4">
+                        Maria’s journey has been one of service and growth. With a background deeply rooted in both counseling and education, she proudly served as a Presidential Member of the American Christian Counselors Association from 2009 to 2020, offering guidance and support to countless individuals as they navigated their own paths of healing and personal growth. She also dedicated over a decade as a volunteer Big Sister with Big Brothers Big Sisters of America from 2004 to 2016, mentoring young people and encouraging them to reach for their full potential.
+                    </p>
+
+                    <p class="mb-4">
+                        From 2012 to 2014, and again in 2018, Maria served as a Judge for the Invention Convention League, inspiring the next generation of inventors and creators. She wears many hats—wife, stepmom, big sister, aunt, godmother, and trusted friend—finding joy in nurturing the people she’s called to serve and support. Her passion for community and personal connection fuels everything she does.
+                    </p>
+
+                    <p class="mb-4">
+                        The Lion You Don’t See is a project that’s especially close to Maria’s heart. Inspired by her desire to help readers of all ages uncover the quiet, often hidden strength inside them, she believes that through storytelling, people can begin to see beyond their struggles and recognize the courage they didn’t even know they had.
+                    </p>
+
+                    <p class="mb-4">
+                        Maria’s ultimate goal? To show you that the lion you don’t see is roaring inside you, just waiting to be discovered.
+                    </p>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<section class="cta-home">
+    <div class="container">
+        <div class="row justify-content-center bg-main">
+            <div class="col-lg-6">
+                 <h2 class="text-lg">Uncover Your Inner Strength with The Lion You Don’t See.</h2>
+                 <p class="mt-3 mb-0">Sign up for updates, exclusive content, and insights that will keep you inspired as we prepare to roar together.</p>
+            </div>
+
+            <div class="col-lg-6">
+                <div id="subscribe-message" style="display: none; color: rgb(255, 255, 255); margin-top: 10px;"></div>
+                <form action="{% url 'subscribe' %}" method="post" class="subscribe-form">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <input type="text" class="form-control" name="full_name" placeholder="Full Name" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" class="form-control" name="email" placeholder="Enter Your email" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-main-2">Sign Up Now</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section contact" id="contact">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-12 col-lg-6">
+                <div class="heading text-center">
+                    <span class="text-color">Get in Touch</span>
+                    <h2>Contact Maria Gregory</h2>
+                    <p>Have a question, need inspiration, or simply want to connect? Reach out to us—we'd love to hear from you and be part of your journey toward inner strength and resilience.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <form class="contact__form form-row contact-form w-100" method="post" action="{% url 'contact' %}" id="contactForm">
+                    {% csrf_token %}
+
+                    <div class="row justify-content-center w-100">
+                        <div class="col-lg-10">
+                            <div class="form-group">
+                                <input type="text" id="name" name="name" class="form-control" placeholder="Enter Your Name" required>
+                            </div>
+                       
+                            <div class="form-group">
+                                <input type="email" name="email" id="email" class="form-control" placeholder="Enter Your Email Address" required>
+                            </div>
+                      
+                            <div class="form-group">
+                                <textarea id="message" name="message" cols="30" rows="8" class="form-control" placeholder="Your Message" required></textarea>    
+                            </div>
+                        
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-main btn-rounded">Send Message</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="alert alert-success contact__msg" id="contactMessage" style="display: none; color: green; text-align: center; font-weight: bold;" role="alert">
+                        Thank you for getting in touch!
+                    </div>
+                </form> 
+            </div>         
+        </div>
+    </div>
+</section>
+
+<script>
+    document.querySelector(".subscribe-form").addEventListener("submit", function(event) {
+        event.preventDefault(); // Prevent form from submitting normally
+
+        // Gather form data
+        const formData = new FormData(this);
+
+        // Send AJAX request
+        fetch("{% url 'subscribe' %}", {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": formData.get("csrfmiddlewaretoken") // Include CSRF token
+            },
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.message) {
+                // Display the success message
+                document.getElementById("subscribe-message").innerText = data.message;
+                document.getElementById("subscribe-message").style.display = "block";
+
+                // Clear the form
+                document.querySelector(".subscribe-form").reset();
+            }
+        })
+        .catch(error => console.error("Error:", error));
+    });
+
+    document.getElementById("contactForm").addEventListener("submit", function(event) {
+    event.preventDefault();  // Prevent normal form submission
+
+    const formData = new FormData(this);
+
+    // Send AJAX request
+    fetch("{% url 'contact' %}", {
+        method: "POST",
+        headers: {
+            "X-CSRFToken": formData.get("csrfmiddlewaretoken")  // Include CSRF token
+        },
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log("Parsed data:", data);  // Log parsed JSON data to inspect structure
+
+        const contactMessage = document.getElementById("contactMessage");
+
+        // Display the success or error message
+        if (data.message) {
+            // Display only the 'message' field's value
+            contactMessage.textContent = data.message;
+            contactMessage.style.display = "block";
+            document.getElementById("contactForm").reset();
+        } else if (data.error) {
+            contactMessage.textContent = data.error;
+            contactMessage.style.display = "block";
+        } else {
+            contactMessage.textContent = "Unexpected response structure.";
+            contactMessage.style.display = "block";
+            console.error("Unexpected structure:", data);
+        }
+    })
+    .catch(error => {
+        console.error("Fetch error:", error);
+        const contactMessage = document.getElementById("contactMessage");
+        contactMessage.textContent = "An error occurred. Please try again.";
+        contactMessage.style.display = "block";
+    });
+});
+
+
+</script>
+
+{% endblock %}

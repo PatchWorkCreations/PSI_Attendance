@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="Treaser - Book landing template">
+  <meta name="keywords" content="Treaser,creative,author,book,ebook,marketing,digital, agency, startup,onepage, clean, modern,business, company">
+  <meta name="author" content="dreambuzz">
+
+  <title>{% block title %}Treaser-Book Landing Template{% endblock %}</title>
+
+  {% load static %}
+
+  <!-- Favicon -->
+  <link rel="shortcut icon" type="image/x-icon" href="{% static 'assets/images/favicon.ico' %}">
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="{% static 'assets/plugins/bootstrap/css/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/plugins/animate-css/animate.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/plugins/fontawesome/css/all.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/plugins/themify/css/themify-icons.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/plugins/magnific-popup/magnific-popup.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/plugins/slick-carousel/slick/slick.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/plugins/owl-carousel/owl.carousel.min.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/plugins/owl-carousel/owl.theme.default.min.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/css/style-2.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/css/responsive.css' %}">
+
+</head>
+
+<body id="top-header">
+
+  <!-- Include Header -->
+  {% include 'myApp/header.html' %}
+
+  <!-- Main Content Block -->
+  {% block content %}
+  <!-- Content will be injected here by child templates -->
+  {% endblock content %}
+
+  <!-- Include Footer -->
+  {% include 'myApp/footer.html' %}
+
+  <!-- Essential Scripts -->
+  <script src="{% static 'assets/plugins/jquery/jquery.min.js' %}"></script>
+  <script src="{% static 'assets/plugins/bootstrap/js/bootstrap.min.js' %}"></script>
+  <script src="{% static 'assets/plugins/bootstrap/js/popper.min.js' %}"></script>
+  <script src="{% static 'assets/plugins/counterup/waypoint.js' %}"></script>
+  <script src="{% static 'assets/plugins/counterup/jquery.counterup.min.js' %}"></script>
+  <script src="{% static 'assets/plugins/owl-carousel/owl.carousel.min.js' %}"></script>
+  <script src="{% static 'assets/plugins/magnific-popup/jquery.magnific-popup.js' %}"></script>
+  <script src="{% static 'assets/plugins/slick-carousel/slick/slick.min.js' %}"></script>
+  <script src="{% static 'assets/js/contact.js' %}"></script>
+  <script src="{% static 'assets/js/theme.js' %}"></script>
+
+</body>
+</html>
