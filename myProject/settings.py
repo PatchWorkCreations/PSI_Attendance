@@ -23,6 +23,12 @@ ALLOWED_HOSTS = [
     'psiattendance-production.up.railway.app',
 ]
 
+# settings.py
+CSRF_TRUSTED_ORIGINS = [
+    'https://psiattendance-production.up.railway.app',
+    'http://127.0.0.1:8000',  # If you're running locally, add this as well
+]
+
 
 # Application definition
 
@@ -148,4 +154,8 @@ EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS', 'True').lower() in ('true', '1', 'yes
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', '')  # No fallback for sensitive data
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', '')  # No fallback for sensitive data
 DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'feed.teach.love@gmail.com')  # Provide a fallback
+
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+
 
