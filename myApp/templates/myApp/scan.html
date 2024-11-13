@@ -3,73 +3,83 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Scan QR Code for Attendance</title>
     <script src="{% static 'assets/js/html5-qrcode.min.js' %}"></script>
-
     <style>
         /* Base styling for the page */
         body {
             font-family: 'Arial', sans-serif;
-            background-color: #f8f9fa;
+            background-color: #f4f6f8;
             margin: 0;
             padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
         }
 
         h1 {
-            font-size: 2rem;
+            font-size: 1.8rem;
             color: #333;
-            margin-bottom: 20px;
+            margin: 0 0 20px;
             font-weight: 600;
         }
 
-        /* Center the content properly */
+        /* Center the content with mobile-first adjustments */
         .content {
             text-align: center;
-            width: 100%;
-            max-width: 400px; 
+            width: 90%;
+            max-width: 400px;
             padding: 20px;
             box-sizing: border-box;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.15);
         }
 
         /* Container for QR code scanner */
         #qr-reader {
             width: 100%;
             max-width: 350px;
-            height: 350px;
-            border: 3px solid #3498db;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+            height: auto;
+            aspect-ratio: 1;
+            border: 2px solid #3498db;
+            border-radius: 10px;
+            margin: 15px 0;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
         }
 
         /* Result text style */
         #result {
-            font-size: 1.1rem;
-            color: #333;
+            font-size: 1rem;
+            color: #444;
             font-weight: 500;
-            margin-top: 10px;
+            margin-top: 15px;
             padding: 15px;
-            background-color: #fff;
+            background-color: #eef1f5;
             border-radius: 8px;
-            border: 2px solid #ddd;
-            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
-            margin-top: 20px;
+            border: 1px solid #ddd;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
         }
 
         /* Button styles */
-        .btn {
-            background-color: #3498db;
-            color: #fff;
-            padding: 12px 25px;
-            border-radius: 30px;
+        .btn, .btn-reset {
+            width: 100%;
+            max-width: 300px;
+            padding: 12px 0;
+            border-radius: 25px;
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.2s ease;
             border: none;
             margin-top: 10px;
-            width: 100%;
-            max-width: 300px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .btn {
+            background-color: #3498db;
+            color: #fff;
         }
 
         .btn:hover {
@@ -81,33 +91,37 @@
         .btn-reset {
             background-color: #e74c3c;
             color: #fff;
-            padding: 12px 25px;
-            border-radius: 30px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.2s ease;
-            width: 100%;
-            max-width: 300px;
-            margin-top: 15px;
-            display: none; 
+            display: none;
         }
 
         .btn-reset:hover {
             background-color: #c0392b;
             transform: translateY(-2px);
         }
+
+        /* Media queries for responsiveness */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.5rem;
+            }
+            .content {
+                padding: 15px;
+            }
+            #result {
+                font-size: 0.9rem;
+                padding: 10px;
+            }
+        }
     </style>
 </head>
 <body>   
-    {% include 'myApp/header.html' %}
+    
     <div class="content">
+        {% include 'myApp/header.html' %}
         <h1>Scan QR Code for Attendance</h1>
         <div id="qr-reader"></div>
         <p id="result">Scan a QR code to log attendance.</p>
-        <div>
-            <button class="btn-reset" id="resetScannerBtn">Scan Another QR Code</button>
-        </div>
+        <button class="btn-reset" id="resetScannerBtn">Scan Another QR Code</button>
     </div>
 
     <script>
@@ -115,12 +129,9 @@
 
         // Function to handle successful scan
         function onScanSuccess(decodedText, decodedResult) {
-            document.getElementById("result").innerText = "Scanning QR Code...";
-
-            // Show the reset button once QR code is scanned
+            document.getElementById("result").innerText = "Processing QR Code...";
             document.getElementById("resetScannerBtn").style.display = "block";
 
-            // Fetch the URL to log attendance
             fetch("{% url 'log_attendance' %}", {
                 method: "POST",
                 headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -128,7 +139,7 @@
             })
             .then(response => response.json())
             .then(data => {
-                document.getElementById("result").innerText = data.message;  // Display custom message
+                document.getElementById("result").innerText = data.message;
             })
             .catch(console.error);
         }
@@ -140,26 +151,19 @@
                 { facingMode: "environment" },
                 { fps: 10, qrbox: { width: 250, height: 250 } },
                 onScanSuccess
-            ).catch(err => {
-                console.error("Error starting QR code scanner: ", err);
-            });
+            ).catch(console.error);
         }
 
         // Reset the scanner and hide buttons
         document.getElementById("resetScannerBtn").addEventListener("click", function() {
-            // Hide the reset button and reset the text
             document.getElementById("resetScannerBtn").style.display = "none";
             document.getElementById("result").innerText = "Scan a QR code to log attendance.";
 
-            // Restart the scanner
             html5QrCode.stop().then(() => {
                 startScanner();
-            }).catch((err) => {
-                console.error("Error stopping scanner: ", err);
-            });
+            }).catch(console.error);
         });
 
-        // Initial start of the scanner when page loads
         startScanner();
     </script>
 </body>
