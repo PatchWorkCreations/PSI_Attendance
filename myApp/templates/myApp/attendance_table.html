@@ -1,0 +1,257 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Event Attendance Table</title>
+    
+    <!-- Include Google Fonts for better typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+    <!-- Link to Bootstrap CSS for modern styles -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        /* Base styling for the page */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f4f7fa;
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 30px;
+    font-weight: 600;
+}
+
+/* Table Styling */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 30px;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 12px 15px;
+    text-align: center;
+    font-size: 1rem;
+}
+
+th {
+    background-color: #3498db;
+    color: white;
+    font-weight: 600;
+    cursor: pointer; /* Pointer to indicate clickable headers */
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* Container for content to ensure centered content */
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 30px 0;
+}
+
+/* Header Styling */
+.navbar-nav .nav-link {
+    font-size: 16px;
+    font-weight: 600;
+    padding: 10px 15px;
+    color: #333;
+    transition: color 0.3s ease;
+}
+
+.navbar-nav .nav-link:hover {
+    color: #3498db;
+}
+
+.btn-back {
+    background-color: #3498db;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-align: center;
+    cursor: pointer;
+    font-size: 16px;
+    text-decoration: none;
+    margin-top: 20px;
+}
+
+.btn-back:hover {
+    background-color: #2980b9;
+}
+
+.download-buttons {
+    margin-bottom: 20px;
+}
+
+.btn-download {
+    background-color: #3498db;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+/* Remove outline when focused */
+.btn-download:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+.btn-download:hover {
+    background-color: #2980b9;
+}
+
+    </style>
+</head>
+<body>
+
+    {% include 'myApp/header.html' %}
+    <!-- Main Content -->
+    <div class="container">
+        <h1>Event Attendance Table</h1>
+        
+        <!-- Buttons for CSV, Excel, PDF Download -->
+        <div class="download-buttons">
+            <button class="btn-download" id="downloadCSV">Download CSV</button>
+            <button class="btn-download" id="downloadExcel">Download Excel</button>
+            <button class="btn-download" id="downloadPDF">Download PDF</button>
+        </div>
+        
+        <table id="attendanceTable">
+            <thead>
+                <tr>
+                    <th id="nameHeader">Name</th>
+                    {% for day in event_days %}
+                        <th>Day {{ forloop.counter }}<br>({{ day|date:"Y-m-d" }})</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in attendance_data %}
+                    <tr>
+                        <td>{{ row.name }}</td>
+                        <td>{{ row.day_1 }}</td>
+                        <td>{{ row.day_2 }}</td>
+                        <td>{{ row.day_3 }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+
+    <!-- Include Bootstrap JS for functionality -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- JavaScript for Table Sorting -->
+    <script>
+        let sortDirection = 'asc'; // Variable to toggle sorting direction
+        
+        // Add event listener to the Name header for sorting
+        document.getElementById('nameHeader').addEventListener('click', function() {
+            sortTable(0); // Column 0 is for Name
+        });
+
+        // Sort function
+        function sortTable(columnIndex) {
+            const table = document.getElementById('attendanceTable');
+            const rows = Array.from(table.rows).slice(1); // Get all rows except the header
+            
+            const sortedRows = rows.sort(function (rowA, rowB) {
+                const cellA = rowA.cells[columnIndex].innerText;
+                const cellB = rowB.cells[columnIndex].innerText;
+
+                // Toggle sorting direction
+                if (sortDirection === 'asc') {
+                    return cellA.localeCompare(cellB);  // Sort in ascending order
+                } else {
+                    return cellB.localeCompare(cellA);  // Sort in descending order
+                }
+            });
+
+            // Toggle sort direction
+            sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
+
+            // Rebuild the table with sorted rows
+            sortedRows.forEach(function (row) {
+                table.appendChild(row);
+            });
+        }
+
+        // Download CSV function
+        document.getElementById('downloadCSV').addEventListener('click', function() {
+            const table = document.getElementById('attendanceTable');
+            let csvContent = "data:text/csv;charset=utf-8,";
+            
+            const rows = Array.from(table.rows);
+            rows.forEach(row => {
+                const rowData = Array.from(row.cells).map(cell => cell.innerText).join(',');
+                csvContent += rowData + "\n";
+            });
+            
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement('a');
+            link.setAttribute('href', encodedUri);
+            link.setAttribute('download', 'attendance_table.csv');
+            link.click();
+        });
+
+        // Download Excel function (using SheetJS)
+        document.getElementById('downloadExcel').addEventListener('click', function() {
+            const table = document.getElementById('attendanceTable');
+            const wb = XLSX.utils.table_to_book(table, { sheet: "Attendance" });
+            XLSX.writeFile(wb, "attendance_table.xlsx");
+        });
+
+        // Download PDF function (using jsPDF)
+        document.getElementById('downloadPDF').addEventListener('click', function() {
+        const { jsPDF } = window.jspdf; // Destructure jsPDF from window
+        const doc = new jsPDF();
+        
+        // Wait for the table to load and then use autoTable
+        doc.autoTable({ 
+            html: '#attendanceTable', 
+            startY: 20, // Optional: set the Y position for the table
+            margin: { top: 10 },
+            styles: {
+                fontSize: 10,
+                overflow: 'linebreak'
+            },
+            headStyles: {
+                fillColor: [52, 152, 219], // Customize header color
+                textColor: 255
+            },
+            bodyStyles: {
+                textColor: 50
+            }
+        });
+
+        // Save the PDF
+        doc.save('attendance_table.pdf');
+    });
+    </script>
+
+    <!-- Include libraries for Excel and PDF downloads -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.1/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.24/jspdf.plugin.autotable.min.js"></script>
+
+</body>
+</html>

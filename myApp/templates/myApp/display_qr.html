@@ -1,0 +1,13 @@
+<!-- myApp/templates/myApp/display_qr.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Attendee QR Code</title>
+</head>
+<body>
+    <h1>{{ attendee.name }}'s QR Code</h1>
+    <img src="{{ qr_url }}" alt="QR Code for {{ attendee.name }}">
+    <p>Email: {{ attendee.email }}</p>
+</body>
+</html>

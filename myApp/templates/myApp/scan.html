@@ -1,0 +1,170 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Scan QR Code for Attendance</title>
+    <script src="{% static 'assets/js/html5-qrcode.min.js' %}"></script>
+
+    <style>
+        /* Base styling for the page */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f4f7fa;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+
+        h1 {
+            font-size: 2rem;
+            color: #333;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        /* Center the content properly */
+        .content {
+            text-align: center;
+            width: 100%;
+            max-width: 400px; 
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        /* Container for QR code scanner */
+        #qr-reader {
+            width: 100%;
+            max-width: 350px;
+            height: 350px;
+            border: 3px solid #3498db;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Result text style */
+        #result {
+            font-size: 1.1rem;
+            color: #333;
+            font-weight: 500;
+            margin-top: 10px;
+            padding: 15px;
+            background-color: #fff;
+            border-radius: 8px;
+            border: 2px solid #ddd;
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+
+        /* Button styles */
+        .btn {
+            background-color: #3498db;
+            color: #fff;
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            border: none;
+            margin-top: 10px;
+            width: 100%;
+            max-width: 300px;
+        }
+
+        .btn:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+        }
+
+        /* Reset Button */
+        .btn-reset {
+            background-color: #e74c3c;
+            color: #fff;
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            width: 100%;
+            max-width: 300px;
+            margin-top: 15px;
+            display: none; 
+        }
+
+        .btn-reset:hover {
+            background-color: #c0392b;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="content">
+        <h1>Scan QR Code for Attendance</h1>
+        <div id="qr-reader"></div>
+        <p id="result">Scan a QR code to log attendance.</p>
+        <div>
+            <button class="btn-reset" id="resetScannerBtn">Scan Another QR Code</button>
+        </div>
+    </div>
+
+    <script>
+        let html5QrCode;
+
+        // Function to handle successful scan
+        function onScanSuccess(decodedText, decodedResult) {
+            document.getElementById("result").innerText = "Scanning QR Code...";
+
+            // Show the reset button once QR code is scanned
+            document.getElementById("resetScannerBtn").style.display = "block";
+
+            // Fetch the URL to log attendance
+            fetch("{% url 'log_attendance' %}", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: `qr_data=${decodedText}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("result").innerText = data.message;  // Display custom message
+            })
+            .catch(console.error);
+        }
+
+        // Start QR code scanner
+        function startScanner() {
+            html5QrCode = new Html5Qrcode("qr-reader");
+            html5QrCode.start(
+                { facingMode: "environment" },
+                { fps: 10, qrbox: { width: 250, height: 250 } },
+                onScanSuccess
+            ).catch(err => {
+                console.error("Error starting QR code scanner: ", err);
+            });
+        }
+
+        // Reset the scanner and hide buttons
+        document.getElementById("resetScannerBtn").addEventListener("click", function() {
+            // Hide the reset button and reset the text
+            document.getElementById("resetScannerBtn").style.display = "none";
+            document.getElementById("result").innerText = "Scan a QR code to log attendance.";
+
+            // Restart the scanner
+            html5QrCode.stop().then(() => {
+                startScanner();
+            }).catch((err) => {
+                console.error("Error stopping scanner: ", err);
+            });
+        });
+
+        // Initial start of the scanner when page loads
+        startScanner();
+    </script>
+</body>
+</html>

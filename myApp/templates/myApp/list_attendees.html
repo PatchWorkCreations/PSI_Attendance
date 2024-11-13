@@ -1,0 +1,182 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEJ+PMdXaAf+6nD/kSFK6BEr9AlBhM8orOOUjsqa4j95X2Vbtz5j5y5a9amZG" crossorigin="anonymous">
+    <title>All Attendees</title>
+
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #333;
+            margin-bottom: 30px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        /* Table Styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #3498db;
+            color: white;
+            font-weight: 600;
+        }
+
+        tr {
+            background-color: #fff;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f7f7f7;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-view {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .btn-view:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-delete {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .btn-delete:hover {
+            background-color: #c82333;
+        }
+
+        .btn:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        /* Align buttons correctly in table */
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        /* Container for content to ensure centered content */
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 0;
+        }
+
+        /* Back to Main Menu Button */
+        .btn-back {
+            background-color: #3498db;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+
+        .btn-back:hover {
+            background-color: #2980b9;
+        }
+
+        /* Add space between rows and buttons */
+        .text-center {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            .table {
+                font-size: 14px;
+            }
+            .btn-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    {% include 'myApp/header.html' %}  <!-- Include the header here -->
+
+    <div class="container">
+        <h1>All Attendees</h1>
+        
+        <!-- Attendees Table -->
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for attendee in attendees %}
+                    <tr>
+                        <td>{{ attendee.first_name }} {{ attendee.last_name }}</td>
+                        <td>{{ attendee.email }}</td>
+                        <td class="btn-group">
+                            <!-- View QR Code Button -->
+                            <a href="{% url 'generate_qr' attendee.id %}" class="btn btn-view">
+                                View QR Code
+                            </a>
+
+                            <!-- Delete Button with Confirmation -->
+                            <form action="{% url 'delete_attendee' attendee.id %}" method="POST" style="display:inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-delete" onclick="return confirm('Are you sure you want to delete this attendee?')">
+                                    Delete
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Back to Main Menu -->
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pzjw8f+ua7Kw1TIq0M8F1jz4Wg2fhJpZtkp8ktZJd40h4QkFhZq+Nbb7+eZu9FSo" crossorigin="anonymous"></script>
+</body>
+</html>
