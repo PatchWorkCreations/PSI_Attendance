@@ -9,15 +9,10 @@
     <style>
         /* Base styling for the page */
         body {
-            font-family: 'Poppins', sans-serif;
-            background-color: #f4f7fa;
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa;
             margin: 0;
             padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            flex-direction: column;
         }
 
         h1 {
@@ -104,7 +99,8 @@
         }
     </style>
 </head>
-<body>
+<body>   
+    {% include 'myApp/header.html' %}
     <div class="content">
         <h1>Scan QR Code for Attendance</h1>
         <div id="qr-reader"></div>

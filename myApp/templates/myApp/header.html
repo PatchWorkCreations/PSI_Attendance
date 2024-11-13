@@ -1,56 +1,72 @@
 {% load static %}
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 
-    <!-- Link to Bootstrap CSS for modern styles -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+<!-- Link to Bootstrap CSS for modern styles -->
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 
 <style>
-     /* Header Styling */
-     .navbar-nav .nav-link {
-            font-size: 16px;
-            font-weight: 600;
-            padding: 10px 15px;
-            color: #333;
-            transition: color 0.3s ease;
-        }
+    /* Header Styling */
+    .navbar-nav .nav-link {
+        font-size: 16px;
+        font-weight: 600;
+        padding: 10px 15px;
+        color: #333;
+        transition: color 0.3s ease;
+    }
 
-        .navbar-nav .nav-link:hover {
-            color: #3498db;
-        }
+    .navbar-nav .nav-link:hover {
+        color: #3498db;
+    }
 
-        .btn-back {
-            background-color: #3498db;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
-            text-align: center;
-            cursor: pointer;
-            font-size: 16px;
-            text-decoration: none;
-            margin-top: 20px;
-        }
+    .btn-back {
+        background-color: #3498db;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 5px;
+        text-align: center;
+        cursor: pointer;
+        font-size: 16px;
+        text-decoration: none;
+        margin-top: 20px;
+    }
 
-        .btn-back:hover {
-            background-color: #2980b9;
-        }
+    .btn-back:hover {
+        background-color: #2980b9;
+    }
+
+    /* Ensures the header doesn't affect other sections */
+    .header-wrapper {
+        width: 100%;
+        background-color: #f8f9fa; /* Light background for clarity */
+        margin: 0;
+        padding: 0;
+        z-index: 10; /* Ensure it stays on top */
+    }
 </style>
 
-<!-- Header Section -->
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container">
-        <a class="navbar-brand" href="{% url 'index' %}">
-            <h2 class="mb-0">PSI</h2>
-        </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item"><a class="nav-link" href="{% url 'register_attendee' %}">Register New Attendee</a></li>
-                <li class="nav-item"><a class="nav-link" href="{% url 'list_attendees' %}">List All Attendees</a></li>
-                <li class="nav-item"><a class="nav-link" href="{% url 'scan_qr_code' %}">Scan QR Code</a></li>
-                <li class="nav-item"><a class="nav-link" href="{% url 'attendance_table' %}">View Attendance Table</a></li>
-            </ul>
+<!-- Header Section Wrapped in a Separate Container -->
+<div class="header-wrapper">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'index' %}">
+                <h2 class="mb-0">PSI</h2>
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item"><a class="nav-link" href="{% url 'register_attendee' %}">Register New Attendee</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'list_attendees' %}">List All Attendees</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'scan_qr_code' %}">Scan QR Code</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'attendance_table' %}">View Attendance Table</a></li>
+                </ul>
+            </div>
         </div>
-    </div>
-</nav>
+    </nav>
+</div>
+
+<!-- Include jQuery, Popper.js, and Bootstrap JS at the end of the body -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

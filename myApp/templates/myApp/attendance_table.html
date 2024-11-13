@@ -121,6 +121,7 @@ tr:hover {
 <body>
 
     {% include 'myApp/header.html' %}
+
     <!-- Main Content -->
     <div class="container">
         <h1>Event Attendance Table</h1>
@@ -135,7 +136,10 @@ tr:hover {
         <table id="attendanceTable">
             <thead>
                 <tr>
-                    <th id="nameHeader">Name</th>
+                    <th>Name</th>
+                    <th>MI</th>
+                    <th>Nickname</th>
+                    <th>Mobile Number</th>
                     {% for day in event_days %}
                         <th>Day {{ forloop.counter }}<br>({{ day|date:"Y-m-d" }})</th>
                     {% endfor %}
@@ -145,6 +149,9 @@ tr:hover {
                 {% for row in attendance_data %}
                     <tr>
                         <td>{{ row.name }}</td>
+                        <td>{{ row.middle_initial }}</td>
+                        <td>{{ row.nickname }}</td>
+                        <td>{{ row.mobile_number }}</td>
                         <td>{{ row.day_1 }}</td>
                         <td>{{ row.day_2 }}</td>
                         <td>{{ row.day_3 }}</td>
@@ -152,7 +159,6 @@ tr:hover {
                 {% endfor %}
             </tbody>
         </table>
-
     </div>
 
     <!-- Include Bootstrap JS for functionality -->
@@ -199,13 +205,13 @@ tr:hover {
         document.getElementById('downloadCSV').addEventListener('click', function() {
             const table = document.getElementById('attendanceTable');
             let csvContent = "data:text/csv;charset=utf-8,";
-            
+
             const rows = Array.from(table.rows);
             rows.forEach(row => {
                 const rowData = Array.from(row.cells).map(cell => cell.innerText).join(',');
                 csvContent += rowData + "\n";
             });
-            
+
             const encodedUri = encodeURI(csvContent);
             const link = document.createElement('a');
             link.setAttribute('href', encodedUri);
@@ -222,30 +228,11 @@ tr:hover {
 
         // Download PDF function (using jsPDF)
         document.getElementById('downloadPDF').addEventListener('click', function() {
-        const { jsPDF } = window.jspdf; // Destructure jsPDF from window
-        const doc = new jsPDF();
-        
-        // Wait for the table to load and then use autoTable
-        doc.autoTable({ 
-            html: '#attendanceTable', 
-            startY: 20, // Optional: set the Y position for the table
-            margin: { top: 10 },
-            styles: {
-                fontSize: 10,
-                overflow: 'linebreak'
-            },
-            headStyles: {
-                fillColor: [52, 152, 219], // Customize header color
-                textColor: 255
-            },
-            bodyStyles: {
-                textColor: 50
-            }
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            doc.autoTable({ html: '#attendanceTable' });
+            doc.save('attendance_table.pdf');
         });
-
-        // Save the PDF
-        doc.save('attendance_table.pdf');
-    });
     </script>
 
     <!-- Include libraries for Excel and PDF downloads -->

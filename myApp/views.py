@@ -9,7 +9,10 @@ def scan_qr_code(request):
 
 from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
+from django.utils import timezone
 from .models import Attendee, Attendance
+from django.views.decorators.csrf import csrf_exempt
+
 @csrf_exempt
 def log_attendance(request):
     if request.method == "POST":
@@ -17,41 +20,59 @@ def log_attendance(request):
         print(f"QR Data: {qr_data}")  # Debug print statement
         
         try:
-            attendee_id, _ = qr_data.split("-")
-            print(f"Attendee ID: {attendee_id}")  # Debug print statement
+            # Expecting QR data in the format: nickname
+            nickname = qr_data
+            print(f"Attendee Nickname: {nickname}")  # Debug print statement
 
-            attendee = Attendee.objects.get(id=attendee_id)
+            # Fetch the attendee by nickname
+            attendee = Attendee.objects.get(nickname=nickname)
 
             # Check if the attendee has already marked attendance today
             existing_attendance = Attendance.objects.filter(attendee=attendee, scanned_at__date=timezone.now().date()).first()
 
             if existing_attendance:
-                return JsonResponse({"status": "error", "message": f"Attendee {attendee.first_name} {attendee.last_name} is already marked as present today."})
+                return JsonResponse({
+                    "status": "error",
+                    "message": f"Attendee {attendee.first_name} {attendee.last_name} is already marked as present today."
+                })
             
             # Create the attendance record
             Attendance.objects.create(attendee=attendee)
             
-            return JsonResponse({"status": "success", "message": f"Attendance logged for {attendee.first_name} {attendee.last_name}"})
+            return JsonResponse({
+                "status": "success",
+                "message": f"Attendance logged for {attendee.first_name} {attendee.last_name}"
+            })
         
-        except ValueError:
-            return JsonResponse({"status": "error", "message": "Invalid QR data format."})
         except Attendee.DoesNotExist:
-            return JsonResponse({"status": "error", "message": "No QR code attendee on record."})
+            return JsonResponse({
+                "status": "error",
+                "message": "No attendee found with the provided nickname."
+            })
+        except ValueError:
+            return JsonResponse({
+                "status": "error",
+                "message": "Invalid QR data format. Expected format: 'nickname'."
+            })
 
-    return JsonResponse({"status": "error", "message": "Invalid request"}, status=400)
-
-
+    return JsonResponse({
+        "status": "error",
+        "message": "Invalid request. Please use a POST request."
+    }, status=400)
 
 
 from django.shortcuts import render, redirect
 from .forms import AttendeeRegistrationForm
 from .models import Attendee
 
+from django.contrib import messages
+
 def register_attendee(request):
     if request.method == "POST":
         form = AttendeeRegistrationForm(request.POST)
         if form.is_valid():
             attendee = form.save()  # Save attendee data to the database
+            messages.success(request, f"Attendee {attendee.first_name} {attendee.last_name} registered successfully.")
             return redirect('generate_qr', attendee_id=attendee.id)  # Redirect to QR generation page
     else:
         form = AttendeeRegistrationForm()
@@ -68,23 +89,18 @@ from .models import Attendee
 
 def generate_qr(request, attendee_id):
     attendee = get_object_or_404(Attendee, id=attendee_id)
-    qr_data = f"{attendee.id}-{attendee.email}"  # Unique data for each attendee
+    qr_data = attendee.nickname  # Using nickname as the QR code data
 
-    # Generate QR code
     qr = qrcode.make(qr_data)
-    
-    # Define the path to save QR codes in the 'assets/qr_codes' directory
-    qr_filename = f"qr_{attendee.id}.png"
+    qr_filename = f"qr_{attendee.nickname}.png"
     qr_path = os.path.join(settings.BASE_DIR, 'myApp', 'static', 'assets', 'qr_codes', qr_filename)
-    os.makedirs(os.path.dirname(qr_path), exist_ok=True)  # Create directory if it doesn't exist
+
+    # Ensure the directory exists
+    os.makedirs(os.path.dirname(qr_path), exist_ok=True)
     qr.save(qr_path)
 
-    # URL for the QR code image to be accessed in templates
     qr_url = f"/static/assets/qr_codes/{qr_filename}"
-
     return render(request, 'myApp/display_qr.html', {'attendee': attendee, 'qr_url': qr_url})
-
-
 
 # myApp/views.py
 from django.shortcuts import render
@@ -123,10 +139,19 @@ def attendance_table(request):
     manila_tz = pytz_timezone('Asia/Manila')  # Manila Time (PST)
     
     for attendee in attendees:
-        # Concatenate first name and last name
-        full_name = f"{attendee.first_name} {attendee.last_name if attendee.last_name else ''}"
+        # Concatenate first name, last name, and other details
+        full_name = f"{attendee.last_name}, {attendee.first_name}"
+        middle_initial = attendee.middle_initial if attendee.middle_initial else "N/A"
+        nickname = attendee.nickname if attendee.nickname else "N/A"
+        mobile_number = attendee.mobile_number if attendee.mobile_number else "N/A"
         
-        row = {'name': full_name}
+        # Row data with attendee details and attendance info
+        row = {
+            'name': full_name,
+            'middle_initial': middle_initial,
+            'nickname': nickname,
+            'mobile_number': mobile_number
+        }
         
         for i, day in enumerate(event_days, start=1):
             # Ensure the event day is timezone-aware if you're using timezone-aware datetimes
@@ -159,7 +184,6 @@ def attendance_table(request):
         'attendance_data': attendance_data,
         'event_days': event_days,
     })
-
 
 # myApp/views.py
 from django.shortcuts import render

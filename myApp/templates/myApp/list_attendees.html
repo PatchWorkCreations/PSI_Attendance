@@ -91,6 +91,7 @@
             display: flex;
             gap: 10px;
             justify-content: center;
+            flex-wrap: wrap; /* Allow buttons to wrap on smaller screens */
         }
 
         /* Container for content to ensure centered content */
@@ -130,6 +131,29 @@
             .btn-group {
                 flex-direction: column;
             }
+            h1 {
+                font-size: 2rem;
+            }
+            .btn-back {
+                font-size: 14px;
+                padding: 8px 16px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .btn {
+                font-size: 14px; /* Adjust button font size for smaller devices */
+                padding: 6px 12px;
+            }
+
+            .table th, .table td {
+                font-size: 12px; /* Adjust text size in table for mobile */
+                padding: 10px 12px;
+            }
         }
     </style>
 </head>
@@ -145,7 +169,7 @@
             <thead>
                 <tr>
                     <th>Name</th>
-                    <th>Email</th>
+                    <th>Nickname</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -153,7 +177,7 @@
                 {% for attendee in attendees %}
                     <tr>
                         <td>{{ attendee.first_name }} {{ attendee.last_name }}</td>
-                        <td>{{ attendee.email }}</td>
+                        <td>{{ attendee.nickname }}</td>
                         <td class="btn-group">
                             <!-- View QR Code Button -->
                             <a href="{% url 'generate_qr' attendee.id %}" class="btn btn-view">
@@ -173,7 +197,6 @@
             </tbody>
         </table>
 
-        <!-- Back to Main Menu -->
     </div>
 
     <!-- Bootstrap JS -->

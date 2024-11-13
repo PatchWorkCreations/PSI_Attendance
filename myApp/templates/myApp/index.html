@@ -3,6 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Main Menu</title>
     
     <!-- Include Google Fonts for better typography -->
@@ -10,7 +11,7 @@
 
     <!-- Link to Bootstrap CSS for modern styles -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    
+
     <style>
         /* Global styling */
         body {
@@ -81,6 +82,21 @@
             li {
                 display: block;
                 margin: 10px 0;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            a {
+                padding: 10px 15px;
+                font-size: 13px;
+            }
+
+            .container {
+                padding: 20px 0;
             }
         }
     </style>

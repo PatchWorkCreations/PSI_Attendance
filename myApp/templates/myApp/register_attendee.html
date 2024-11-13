@@ -3,8 +3,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Attendee Registration</title>
-    
+
     <!-- Include Google Fonts for better typography -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 
@@ -101,22 +102,48 @@
             h1 {
                 font-size: 2rem;
             }
+
+            /* Adjust form elements for smaller screens */
+            .form-control {
+                font-size: 1rem;
+            }
+
+            button[type="submit"] {
+                font-size: 16px;
+                padding: 12px;
+            }
+        }
+
+        /* Smaller screen styles */
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .form-control {
+                font-size: 0.9rem;
+            }
+
+            button[type="submit"] {
+                font-size: 15px;
+                padding: 10px;
+            }
         }
     </style>
 </head>
 <body>
 
-    {% include 'myApp/header.html' %} <!-- Include header from a separate file -->
+    {% include 'myApp/header.html' %}
 
     <!-- Main Content -->
     <div class="container">
         <h1>Register Attendee</h1>
 
         <div class="form-container">
-            <form method="post">
+            <form method="post" novalidate>
                 {% csrf_token %}
                 <div class="form-group">
-                    <label for="id_first_name">First Name</label>
+                    <label for="id_first_name">First Name <span class="text-danger">*</span></label>
                     {{ form.first_name }}
                 </div>
                 <div class="form-group">
@@ -124,10 +151,19 @@
                     {{ form.last_name }}
                 </div>
                 <div class="form-group">
-                    <label for="id_email">Email</label>
-                    {{ form.email }}
+                    <label for="id_middle_initial">Middle Initial</label>
+                    {{ form.middle_initial }}
+                </div>
+                <div class="form-group">
+                    <label for="id_nickname">Nickname <span class="text-danger">*</span></label> <!-- Required -->
+                    {{ form.nickname }}
+                </div>
+                <div class="form-group">
+                    <label for="id_mobile_number">Mobile Number (optional)</label> <!-- Optional -->
+                    {{ form.mobile_number }}
                 </div>
                 <button type="submit">Register Attendee</button>
+                
             </form>
         </div>
     </div>
@@ -136,5 +172,20 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        // Simple client-side validation for required fields
+        document.querySelector("form").onsubmit = function(event) {
+            let requiredFields = document.querySelectorAll("[required]");
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    event.preventDefault();
+                    field.classList.add("is-invalid");
+                    field.nextElementSibling.textContent = "This field is required.";
+                }
+            });
+        };
+    </script>
+
 </body>
 </html>
