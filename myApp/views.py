@@ -118,68 +118,71 @@ def list_attendees(request):
     return render(request, 'myApp/list_attendees.html', {'attendees': attendees})
 
 
-
 from django.shortcuts import render
 from django.utils import timezone
 from pytz import timezone as pytz_timezone
 from .models import Attendee, Attendance
+from datetime import datetime, time, timedelta
+
 
 def attendance_table(request):
-    # Define the start date of the event and the three event days
-    event_start_date = timezone.datetime(2024, 11, 14, tzinfo=timezone.get_current_timezone())  # Ensure the date is timezone-aware
+    # Define the start date of the event as a timezone-aware datetime in Manila timezone
+    manila_tz = pytz_timezone('Asia/Manila')
+    event_start_date = datetime(2024, 11, 15, tzinfo=manila_tz)
+
+    # Generate three event days based on the start date
     event_days = [event_start_date + timezone.timedelta(days=i) for i in range(3)]
-    
+
     # Get all attendees
     attendees = Attendee.objects.all()
-    
+
     # Prepare attendance data for each attendee and each day
     attendance_data = []
-    today = timezone.now().date()  # Get today's date
-    
-    manila_tz = pytz_timezone('Asia/Manila')  # Manila Time (PST)
-    
+    today = timezone.now().astimezone(manila_tz).date()  # Today's date in Manila time
+
     for attendee in attendees:
-        # Concatenate first name, last name, and other details
+        # Concatenate first name and last name for display
         full_name = f"{attendee.last_name}, {attendee.first_name}"
         middle_initial = attendee.middle_initial if attendee.middle_initial else "N/A"
         nickname = attendee.nickname if attendee.nickname else "N/A"
         mobile_number = attendee.mobile_number if attendee.mobile_number else "N/A"
-        
-        # Row data with attendee details and attendance info
+
+        # Prepare each row with basic attendee details
         row = {
             'name': full_name,
             'middle_initial': middle_initial,
             'nickname': nickname,
             'mobile_number': mobile_number
         }
-        
+
+        # Check attendance status for each event day
         for i, day in enumerate(event_days, start=1):
-            # Ensure the event day is timezone-aware if you're using timezone-aware datetimes
-            event_day = timezone.make_aware(day) if not day.tzinfo else day
-            
-            # Check if the day has already passed
+            # Ensure each event day is timezone-aware
+            event_day = timezone.make_aware(day, timezone=manila_tz) if not day.tzinfo else day
+
+            # Check if the event day has already passed
             if event_day.date() <= today:
                 # If the event day has passed, check for attendance
                 attendance_record = Attendance.objects.filter(
                     attendee=attendee,
                     scanned_at__date=event_day.date()  # Compare only the date part
                 ).first()
-                
+
                 if attendance_record:
-                    # Convert the scan time to Manila Time (PST)
+                    # Convert scan time to Manila Time and format it
                     manila_time = attendance_record.scanned_at.astimezone(manila_tz)
-                    # Record the exact scan time in 12-hour format (with AM/PM)
                     row[f'day_{i}'] = manila_time.strftime('%Y-%m-%d %I:%M:%S %p')
                 else:
-                    # Mark as absent
+                    # Mark as absent if no record exists for that day
                     row[f'day_{i}'] = "Absent"
             else:
-                # If the event day is in the future, mark as "Not yet happened"
+                # Mark as "Not yet happened" for future event days
                 row[f'day_{i}'] = "Not yet happened"
-                
+        
+        # Add the row to attendance data
         attendance_data.append(row)
 
-    # Pass data to the template
+    # Pass the attendance data and event days to the template
     return render(request, 'myApp/attendance_table.html', {
         'attendance_data': attendance_data,
         'event_days': event_days,
