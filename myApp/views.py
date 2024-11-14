@@ -126,7 +126,7 @@ from .models import Attendee, Attendance
 
 def attendance_table(request):
     # Define the start date of the event and the three event days
-    event_start_date = timezone.datetime(2024, 11, 12, tzinfo=timezone.get_current_timezone())  # Ensure the date is timezone-aware
+    event_start_date = timezone.datetime(2024, 11, 14, tzinfo=timezone.get_current_timezone())  # Ensure the date is timezone-aware
     event_days = [event_start_date + timezone.timedelta(days=i) for i in range(3)]
     
     # Get all attendees
