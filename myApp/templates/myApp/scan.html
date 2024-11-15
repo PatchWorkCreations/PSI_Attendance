@@ -122,6 +122,10 @@
         <div id="qr-reader"></div>
         <p id="result">Scan a QR code to log attendance.</p>
         <button class="btn-reset" id="resetScannerBtn">Scan Another QR Code</button>
+
+        <!-- Manual Input Option -->
+        <input type="text" id="manualQrInput" placeholder="Enter QR code manually" class="form-control" style="display: none; margin-top: 10px;">
+        <button id="manualSubmit" class="btn" style="display: none;">Submit Code</button>
     </div>
 
     <script>
@@ -149,21 +153,44 @@
             html5QrCode = new Html5Qrcode("qr-reader");
             html5QrCode.start(
                 { facingMode: "environment" },
-                { fps: 10, qrbox: { width: 250, height: 250 } },
+                { fps: 5, qrbox: { width: 300, height: 300 } },
                 onScanSuccess
-            ).catch(console.error);
+            ).catch(error => {
+                console.error("QR Code scanning failed:", error);
+                document.getElementById("result").innerText = "Unable to access the camera. Please ensure camera permissions are granted.";
+                document.getElementById("manualQrInput").style.display = "block";
+                document.getElementById("manualSubmit").style.display = "block";
+            });
         }
 
         // Reset the scanner and hide buttons
         document.getElementById("resetScannerBtn").addEventListener("click", function() {
             document.getElementById("resetScannerBtn").style.display = "none";
             document.getElementById("result").innerText = "Scan a QR code to log attendance.";
-
+            
             html5QrCode.stop().then(() => {
                 startScanner();
             }).catch(console.error);
         });
 
+        // Manual input submission handling
+        document.getElementById("manualSubmit").addEventListener("click", function() {
+            const qrData = document.getElementById("manualQrInput").value;
+            document.getElementById("result").innerText = "Processing QR Code...";
+            
+            fetch("{% url 'log_attendance' %}", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: `qr_data=${qrData}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("result").innerText = data.message;
+            })
+            .catch(console.error);
+        });
+
+        // Initialize the scanner
         startScanner();
     </script>
 </body>
